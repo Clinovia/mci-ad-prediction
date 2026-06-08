@@ -1,0 +1,21 @@
+# Data — ADNI data cannot be redistributed
+data/*.csv
+data/*.xlsx
+
+# Results — regenerate by running scripts
+results/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
