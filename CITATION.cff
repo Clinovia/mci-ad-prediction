@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: "MCI-AD Prediction"
+message: "If you use this software, please cite it using the metadata below."
+type: software
+authors:
+  - family-names: Choe
+    given-names: Sophie
+repository-code: "https://github.com/Clinovia/mci-ad-prediction"
+license: MIT
+version: 1.0.0
+date-released: 2026-06-08
