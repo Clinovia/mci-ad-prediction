@@ -13,8 +13,8 @@ from xgboost import XGBClassifier
 # PROJECT SETUP
 # =========================================================
 
-CURRENT_DIR  = Path(__file__).resolve().parent          # src/
-PROJECT_ROOT = CURRENT_DIR.parent                       # stage1_clinical/
+CURRENT_DIR  = Path(__file__).resolve().parent         
+PROJECT_ROOT = CURRENT_DIR.parent                      
 DATA_PATH    = PROJECT_ROOT / "data" / "adni_24m_progression_dataset_filled.csv"
 RESULTS_DIR  = PROJECT_ROOT / "results"
 OUTPUT_CSV   = RESULTS_DIR / "ablation_results.csv"

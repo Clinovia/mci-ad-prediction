@@ -7,13 +7,13 @@ from sklearn.ensemble import RandomForestClassifier
 
 from xgboost import XGBClassifier
 
-from mci_ad.model_building.stage1_clinical.src.preprocessor import (
+from preprocessor import (
     Stage1Preprocessor,
     MINIMAL_FEATURES,
     FULL_FEATURES,
 )
 
-from mci_ad.model_building.stage1_clinical.src.evaluate_classifier import (
+from evaluate_classifier import (
     evaluate_feature_set,
     print_banner,
 )
