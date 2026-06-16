@@ -18,11 +18,23 @@ from evaluate_classifier import (
     print_banner,
 )
 
-TARGET_COL = "Target_24m"
-
 from pathlib import Path
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "adni_24m_progression_dataset_filled.csv"
+TARGET_COL = "Target_24m"
+
+DATA_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "data"
+    / "adni_24m_progression_dataset_filled.csv"
+)
+
+RESULTS_DIR = (
+    Path(__file__).resolve().parent.parent
+    / "results"
+)
+
+RESULTS_DIR.mkdir(exist_ok=True)
+
 
 # ============================================================
 # MODELS
@@ -32,13 +44,15 @@ def build_lr():
 
     return Pipeline([
         ("scaler", StandardScaler()),
-        ("clf",
-         LogisticRegression(
-             max_iter=2000,
-             solver="lbfgs",
-             class_weight="balanced",
-             random_state=42,
-         )),
+        (
+            "clf",
+            LogisticRegression(
+                max_iter=2000,
+                solver="lbfgs",
+                class_weight="balanced",
+                random_state=42,
+            ),
+        ),
     ])
 
 
@@ -99,16 +113,36 @@ def main():
 
         for feature_name, feature_list in feature_sets:
 
-            results.append(
-                evaluate_feature_set(
-                    df=df,
-                    y=y,
-                    estimator=model_builder(),
-                    preprocessor_cls=Stage1Preprocessor,
-                    features=feature_list,
-                    model_name=f"{model_name}-{feature_name}",
-                )
+            result = evaluate_feature_set(
+                df=df,
+                y=y,
+                estimator=model_builder(),
+                preprocessor_cls=Stage1Preprocessor,
+                features=feature_list,
+                model_name=f"{model_name}-{feature_name}",
             )
+
+            results.append(result)
+
+            # ----------------------------------------------------
+            # Save OOF predictions
+            # ----------------------------------------------------
+
+            pd.DataFrame({
+                "y_true": result.y_true,
+                "y_prob": result.y_prob,
+            }).to_csv(
+                RESULTS_DIR
+                / f"{result.name}_oof_predictions.csv",
+                index=False,
+            )
+
+            with open(
+                RESULTS_DIR
+                / f"{result.name}_threshold.txt",
+                "w",
+            ) as f:
+                f.write(str(result.threshold))
 
     print_banner("MODEL COMPARISON")
 
@@ -126,11 +160,18 @@ def main():
         for r in results
     ])
 
-    print(
-        summary_df
-        .sort_values("AUC", ascending=False)
-        .to_string(index=False)
+    summary_df = summary_df.sort_values(
+        "AUC",
+        ascending=False,
     )
+
+    print(summary_df.to_string(index=False))
+
+    summary_df.to_csv(
+        RESULTS_DIR / "model_comparison.csv",
+        index=False,
+    )
+
 
 if __name__ == "__main__":
     main()

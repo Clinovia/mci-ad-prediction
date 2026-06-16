@@ -155,6 +155,8 @@ def run_shap_analysis(
     print("\n  Ranked feature importance (mean |SHAP|):")
     print(mean_abs.round(4).to_string())
 
+    X_test.to_csv(output_dir / "X_test.csv", index=False)
+
 
 # =========================================================
 # MAIN

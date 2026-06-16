@@ -69,6 +69,10 @@ class EvaluationResult:
 
     oof_probs: np.ndarray
 
+    y_true: np.ndarray
+    y_prob: np.ndarray
+    threshold: float
+
 
 # ============================================================
 # HELPERS
@@ -384,10 +388,27 @@ def evaluate_feature_set(
 
     return EvaluationResult(
         name=model_name,
-        features=feature_names,
+        features=features,
+
         fold_aucs=fold_aucs,
+
+        auc_oof=oof["auc_oof"],
         mean_auc=mean_auc,
         std_auc=std_auc,
+
+        threshold=oof["threshold"],
+
+        metrics=oof["metrics"],
+
+        brier_null=oof["brier_null"],
+        bss=oof["bss"],
+
+        fpr=oof["fpr"],
+        tpr=oof["tpr"],
+        thresholds=oof["thresholds"],
+
         oof_probs=oof_probs,
-        **oof,
+
+        y_true=y,
+        y_prob=oof_probs,
     )
